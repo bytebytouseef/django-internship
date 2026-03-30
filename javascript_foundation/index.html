@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vanilla JS To-Do App</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+    h1 { text-align: center; }
+    #todo-form { display: flex; justify-content: center; margin-bottom: 20px; }
+    #todo-input { padding: 10px; width: 300px; font-size: 16px; }
+    #todo-list { list-style: none; padding: 0; max-width: 400px; margin: auto; }
+    #todo-list li { display: flex; justify-content: space-between; padding: 10px; background: #fff; margin-bottom: 5px; border-radius: 5px; }
+    #todo-list li.completed { text-decoration: line-through; color: gray; }
+    button { cursor: pointer; }
+    .filters { text-align: center; margin-top: 20px; }
+    .filters button { margin: 0 5px; padding: 5px 10px; }
+  </style>
+</head>
+<body>
+
+  <h1>To-Do App</h1>
+
+  <form id="todo-form">
+    <input type="text" id="todo-input" placeholder="Add a new task..." required>
+    <button type="submit">Add</button>
+  </form>
+
+  <ul id="todo-list"></ul>
+
+  <div class="filters">
+    <button data-filter="all">All</button>
+    <button data-filter="active">Active</button>
+    <button data-filter="completed">Completed</button>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
