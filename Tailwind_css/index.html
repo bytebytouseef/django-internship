@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style type="text/tailwindcss">
+    :root {
+      --primary: #111827;      /* dark sidebar */
+      --secondary: #2563eb;    /* blue */
+      --bg: #f9fafb;           /* light background */
+      --card: #ffffff;
+    }
+  </style>
+</head>
+
+<body class="bg-[--bg]">
+
+<div class="grid grid-cols-1 md:grid-cols-[220px_1fr] min-h-screen">
+
+  <!-- SIDEBAR -->
+  <aside class="bg-[--primary] text-gray-300 p-5 hidden md:block">
+
+    <h2 class="text-2xl font-bold text-white mb-6">Admin</h2>
+
+    <nav class="space-y-2">
+
+      <!-- Active -->
+      <p class="bg-[--secondary] text-white px-3 py-2 rounded cursor-pointer">
+        Dashboard
+      </p>
+
+     <p class="text-gray-300 px-3 py-2 rounded cursor-pointer 
+          transition-all duration-300 
+          hover:bg-gray-700 hover:text-white hover:translate-x-1">
+  Users
+</p>
+
+      <p class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded cursor-pointer transition">
+        Reports
+      </p>
+
+      <p class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded cursor-pointer transition">
+        Settings
+      </p>
+
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="flex flex-col">
+
+    <!-- NAVBAR -->
+    <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+      <h1 class="text-lg md:text-xl font-semibold text-gray-700">Dashboard</h1>
+
+      <button class="bg-[--secondary] text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+        Logout
+      </button>
+    </header>
+
+    <!-- STATS -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 p-5">
+
+      <div class="bg-white p-5 rounded-xl shadow border text-center">
+        <p class="text-gray-500 text-sm">Users</p>
+        <h2 class="text-2xl font-bold text-blue-600">120</h2>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl shadow border text-center">
+        <p class="text-gray-500 text-sm">Sales</p>
+        <h2 class="text-2xl font-bold text-green-500">300</h2>
+      </div>
+
+      <div class="bg-white p-5 rounded-xl shadow border text-center">
+        <p class="text-gray-500 text-sm">Revenue</p>
+        <h2 class="text-2xl font-bold text-purple-500">$500</h2>
+      </div>
+
+    </section>
+
+    <!-- TABLE -->
+    <section class="p-5">
+      <div class="bg-white rounded-xl shadow border overflow-auto">
+
+        <table class="w-full text-left">
+          <thead class="bg-gray-100 text-gray-600">
+            <tr>
+              <th class="p-3">Name</th>
+              <th class="p-3">Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr class="border-t hover:bg-gray-50 transition">
+              <td class="p-3">Ali</td>
+              <td class="p-3 text-green-600 font-medium">Active</td>
+            </tr>
+
+            <tr class="border-t hover:bg-gray-50 transition">
+              <td class="p-3">Ahmed</td>
+              <td class="p-3 text-red-500 font-medium">Inactive</td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </section>
+
+  </div>
+
+</div>
+
+</body>
+</html>
