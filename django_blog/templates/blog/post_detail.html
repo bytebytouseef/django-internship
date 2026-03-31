@@ -1,0 +1,45 @@
+{% extends 'base.html' %} {% load static %} {% block title %}{{ post.title }} —
+Django Blog{% endblock %} {% block content %}
+
+<article class="post-detail">
+  <header class="post-detail__header">
+    <a href="{% url 'blog:post_list' %}" class="back-link">← Back to Posts</a>
+
+    <h1 class="post-detail__title">{{ post.title }}</h1>
+
+    <div class="post-detail__meta">
+      <span
+        >By
+        <strong
+          >{{ post.author.get_full_name|default:post.author.username }}</strong
+        ></span
+      >
+      <span class="separator">·</span>
+      <time>{{ post.published_date|date:"F j, Y, g:i a" }}</time>
+      <span class="separator">·</span>
+      <span class="status status--{{ post.status }}"
+        >{{ post.get_status_display }}</span
+      >
+    </div>
+  </header>
+
+  <div class="post-detail__body">
+    <!-- linebreaks filter — converts \n to <br> and <p> tags -->
+    {{ post.body|linebreaks }}
+  </div>
+</article>
+
+<!-- Related Posts Section -->
+{% if related_posts %}
+<section class="related-posts">
+  <h3>More by {{ post.author.get_full_name|default:post.author.username }}</h3>
+  <div class="related-posts__grid">
+    {% for related in related_posts %}
+    <div class="related-card">
+      <a href="{% url 'blog:post_detail' related.pk %}">{{ related.title }}</a>
+      <small>{{ related.published_date|date:"M j, Y" }}</small>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endif %} {% endblock %}
