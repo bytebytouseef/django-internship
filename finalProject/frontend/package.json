@@ -1,0 +1,11 @@
+{
+  "name": "intern-management-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Intern Management System",
+  "scripts": {
+    "build:css": "tailwindcss -i ./css/style.css -o ./css/style.compiled.css"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.0.0"
+  }
+}
