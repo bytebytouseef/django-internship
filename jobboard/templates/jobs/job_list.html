@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Browse Jobs — HireBoard{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="hero-inner">
+        <h1 class="hero-title">Find Your <em>Next Role</em></h1>
+        <p class="hero-sub">{{ stats.total_jobs }} active positions · {{ stats.total_applications }} applications submitted</p>
+        
+        <form method="get" class="search-bar">
+            <div class="search-fields">
+                {{ search_form.q }}
+                {{ search_form.location }}
+                {{ search_form.job_type }}
+            </div>
+            <button type="submit" class="btn btn--primary">Search</button>
+            {% if request.GET %}
+                <a href="{% url 'jobs:job_list' %}" class="btn btn--ghost">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+</section>
+
+<section class="jobs-section">
+    <div class="container">
+        {% if jobs %}
+        <div class="jobs-grid">
+            {% for job in jobs %}
+            <article class="job-card">
+                <div class="job-card__header">
+                    {% if job.company_logo %}
+                        <img src="{{ job.company_logo.url }}" alt="{{ job.company_name }}" class="company-logo">
+                    {% else %}
+                        <div class="company-logo-placeholder">{{ job.company_name|first }}</div>
+                    {% endif %}
+                    <div>
+                        <span class="job-type-badge job-type--{{ job.job_type }}">
+                            {{ job.get_job_type_display }}
+                        </span>
+                    </div>
+                </div>
+                
+                <h2 class="job-card__title">
+                    <a href="{% url 'jobs:job_detail' job.pk %}">{{ job.title }}</a>
+                </h2>
+                
+                <p class="job-card__company">{{ job.company_name }}</p>
+                <p class="job-card__location">📍 {{ job.location }}</p>
+                
+                {% if job.salary_min or job.salary_max %}
+                <p class="job-card__salary">💰 {{ job.get_salary_display_text }}</p>
+                {% endif %}
+                
+                <div class="job-card__footer">
+                    <span class="job-card__apps">
+                        {{ job.application_count }} applicant{{ job.application_count|pluralize }}
+                    </span>
+                    <span class="job-card__date">{{ job.created_at|timesince }} ago</span>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination (from ListView's paginate_by) -->
+        {% if is_paginated %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="page-link">← Prev</a>
+            {% endif %}
+            <span class="page-current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="page-link">Next →</a>
+            {% endif %}
+        </div>
+        {% endif %}
+        
+        {% else %}
+        <div class="empty-state">
+            <h2>No jobs found</h2>
+            <p>Try adjusting your search filters.</p>
+            <a href="{% url 'jobs:job_list' %}" class="btn btn--primary">Clear Filters</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

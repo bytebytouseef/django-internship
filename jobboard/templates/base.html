@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}HireBoard{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-inner">
+        <a href="{% url 'jobs:job_list' %}" class="nav-logo">
+            <span class="logo-mark">H</span>HireBoard
+        </a>
+        <div class="nav-links">
+            <a href="{% url 'jobs:job_list' %}">Browse Jobs</a>
+            {% if user.is_authenticated %}
+                {% if user.is_company %}
+                    <a href="{% url 'jobs:job_create' %}" class="btn btn--primary btn--sm">Post a Job</a>
+                    <a href="{% url 'jobs:company_dashboard' %}">Dashboard</a>
+                {% else %}
+                    <a href="{% url 'jobs:my_applications' %}">My Applications</a>
+                {% endif %}
+                <div class="nav-user">
+                    <span class="nav-username">{{ user.get_display_name }}</span>
+                    <form method="post" action="{% url 'accounts:logout' %}" style="display:inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-link">Logout</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'accounts:login' %}">Log In</a>
+                <a href="{% url 'accounts:signup_company' %}" class="btn btn--outline btn--sm">Post Jobs</a>
+                <a href="{% url 'accounts:signup_applicant' %}" class="btn btn--primary btn--sm">Find Jobs</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+{% if messages %}
+<div class="flash-messages">
+    {% for message in messages %}
+    <div class="flash flash--{{ message.tags }}">
+        {{ message }}
+        <button class="flash__close" onclick="this.parentElement.remove()">×</button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="footer-inner">
+        <p>HireBoard — Connect talent with opportunity</p>
+    </div>
+</footer>
+
+</body>
+</html>

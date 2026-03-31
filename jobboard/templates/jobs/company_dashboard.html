@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard — HireBoard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <div>
+            <h1>Welcome, {{ user.get_display_name }}</h1>
+            <p>Manage your job postings</p>
+        </div>
+        <a href="{% url 'jobs:job_create' %}" class="btn btn--primary">+ Post New Job</a>
+    </div>
+    
+    <div class="stats-bar">
+        <div class="stat">
+            <span class="stat-num">{{ jobs|length }}</span>
+            <span class="stat-label">Jobs Posted</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num">{{ stats.total }}</span>
+            <span class="stat-label">Total Applications</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num">{{ stats.pending }}</span>
+            <span class="stat-label">Pending Review</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num">{{ stats.hired }}</span>
+            <span class="stat-label">Hired</span>
+        </div>
+    </div>
+    
+    {% if jobs %}
+    <div class="dashboard-jobs">
+        {% for job in jobs %}
+        <div class="dashboard-job-row">
+            <div class="dashboard-job-info">
+                <h3>
+                    <a href="{% url 'jobs:job_detail' job.pk %}">{{ job.title }}</a>
+                    {% if not job.is_active %}<span class="badge badge--inactive">Inactive</span>{% endif %}
+                </h3>
+                <p>{{ job.get_job_type_display }} · {{ job.location }}</p>
+                <small>Posted {{ job.created_at|date:"M j, Y" }}</small>
+            </div>
+            <div class="dashboard-job-stats">
+                {# num_applications comes from annotate() in the view — no extra query #}
+                <span class="app-count">{{ job.num_applications }} applicant{{ job.num_applications|pluralize }}</span>
+            </div>
+            <div class="dashboard-job-actions">
+                <a href="{% url 'jobs:job_update' job.pk %}" class="btn btn--outline btn--xs">Edit</a>
+                <a href="{% url 'jobs:job_delete' job.pk %}" class="btn btn--danger btn--xs">Delete</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+        <h2>No jobs posted yet</h2>
+        <a href="{% url 'jobs:job_create' %}" class="btn btn--primary">Post Your First Job</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Log In — HireBoard{% endblock %}
+
+{% block content %}
+<div class="container auth-page">
+    <div class="auth-card">
+        <h1>Welcome Back</h1>
+        <p class="auth-sub">Log in to your HireBoard account</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label>{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <span class="field-error">{{ field.errors.0 }}</span>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="btn btn--primary btn--full">Log In →</button>
+        </form>
+        
+        <div class="auth-links">
+            <p>Don't have an account?
+                <a href="{% url 'accounts:signup_applicant' %}">Sign up as Applicant</a> or
+                <a href="{% url 'accounts:signup_company' %}">Sign up as Company</a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

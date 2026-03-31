@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Apply — {{ job.title }}{% endblock %}
+
+{% block content %}
+<div class="container form-page">
+    <div class="form-card">
+        <div class="apply-header">
+            <a href="{% url 'jobs:job_detail' job.pk %}" class="back-link">← Back to Job</a>
+            <h1>Apply to: <em>{{ job.title }}</em></h1>
+            <p class="apply-company">{{ job.company_name }} · {{ job.location }}</p>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data">
+            {# enctype="multipart/form-data" is REQUIRED for file uploads #}
+            {# Without it, request.FILES will be empty #}
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label>Cover Letter *</label>
+                {{ form.cover_letter }}
+                {% if form.cover_letter.errors %}
+                    <span class="field-error">{{ form.cover_letter.errors.0 }}</span>
+                {% endif %}
+                <span class="field-help">Minimum 30 words. Tell them why you're the best fit.</span>
+            </div>
+            
+            <div class="form-group">
+                <label>Resume / CV</label>
+                {{ form.resume }}
+                {% if form.resume.errors %}
+                    <span class="field-error">{{ form.resume.errors.0 }}</span>
+                {% endif %}
+                <span class="field-help">{{ form.resume.help_text }}</span>
+            </div>
+            
+            <div class="form-group form-group--inline">
+                {{ form.terms_accepted }}
+                <label for="{{ form.terms_accepted.id_for_label }}">
+                    {{ form.terms_accepted.label }}
+                </label>
+                {% if form.terms_accepted.errors %}
+                    <span class="field-error">{{ form.terms_accepted.errors.0 }}</span>
+                {% endif %}
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary btn--lg">Submit Application →</button>
+                <a href="{% url 'jobs:job_detail' job.pk %}" class="btn btn--ghost">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

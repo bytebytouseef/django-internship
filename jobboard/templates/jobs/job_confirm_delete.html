@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Delete Job — HireBoard{% endblock %}
+{% block content %}
+<div class="container form-page">
+    <div class="form-card">
+        <h1>Delete Job Posting</h1>
+        <p>Are you sure you want to delete <strong>"{{ object.title }}"</strong>?</p>
+        <p class="delete-warning">⚠️ This will also delete all {{ object.applications.count }} application(s).</p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-actions">
+                <button type="submit" class="btn btn--danger">Yes, Delete</button>
+                <a href="{% url 'jobs:job_detail' object.pk %}" class="btn btn--ghost">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

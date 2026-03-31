@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% block title %}My Applications — HireBoard{%
+endblock %} {% block content %}
+<div class="container">
+  <div class="page-header">
+    <h1>My Applications</h1>
+    <p>
+      {{ applications|length }} application{{ applications|length|pluralize }}
+      submitted
+    </p>
+  </div>
+
+  {% if applications %}
+  <div class="applications-list">
+    {% for app in applications %}
+    <div class="application-row status--{{ app.status }}">
+      <div class="app-info">
+        <h3>
+          <a href="{% url 'jobs:job_detail' app.job.pk %}"
+            >{{ app.job.title }}</a
+          >
+        </h3>
+        {# job.posted_by is available without extra query because of
+        select_related #}
+        <p>{{ app.job.company_name }} · {{ app.job.location }}</p>
+        <small>Applied {{ app.applied_at|date:"F j, Y" }}</small>
+      </div>
+      <div class="app-status">
+        <span class="status-badge status-badge--{{ app.status }}">
+          {{ app.get_status_display }}
+        </span>
+        {% if app.resume %}
+        <a
+          href="{{ app.resume.url }}"
+          class="btn btn--ghost btn--xs"
+          target="_blank"
+          >📄 Resume</a
+        >
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="empty-state">
+    <h2>No applications yet</h2>
+    <p>Start browsing jobs and apply to ones that interest you.</p>
+    <a href="{% url 'jobs:job_list' %}" class="btn btn--primary">Browse Jobs</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

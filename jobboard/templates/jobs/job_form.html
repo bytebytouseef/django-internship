@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page_title }} — HireBoard{% endblock %}
+
+{% block content %}
+<div class="container form-page">
+    <div class="form-card">
+        <h1 class="form-title">{{ page_title }}</h1>
+        
+        <form method="post" enctype="multipart/form-data">
+            {# CSRF token — protects against Cross-Site Request Forgery attacks #}
+            {# Django verifies this token on every POST request #}
+            {# Without it, malicious sites could submit forms as your users #}
+            {% csrf_token %}
+            
+            {% if form.non_field_errors %}
+            <div class="form-errors">
+                {% for error in form.non_field_errors %}
+                    <p class="error-msg">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <div class="form-section">
+                <h3>Job Details</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.title.id_for_label }}">Job Title *</label>
+                        {{ form.title }}
+                        {% if form.title.errors %}
+                            <span class="field-error">{{ form.title.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="form-row form-row--2">
+                    <div class="form-group">
+                        <label>Job Type *</label>
+                        {{ form.job_type }}
+                    </div>
+                    <div class="form-group">
+                        <label>Experience Level *</label>
+                        {{ form.experience_level }}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="{{ form.location.id_for_label }}">Location *</label>
+                    {{ form.location }}
+                    {% if form.location.errors %}
+                        <span class="field-error">{{ form.location.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>Description</h3>
+                <div class="form-group">
+                    <label>Job Description *</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                        <span class="field-error">{{ form.description.errors.0 }}</span>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label>Requirements *</label>
+                    {{ form.requirements }}
+                </div>
+            </div>
+            
+            <div class="form-section">
+                <h3>Compensation & Visibility</h3>
+                <div class="form-row form-row--2">
+                    <div class="form-group">
+                        <label>Min Salary (USD/year)</label>
+                        {{ form.salary_min }}
+                        {% if form.salary_min.errors %}
+                            <span class="field-error">{{ form.salary_min.errors.0 }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label>Max Salary (USD/year)</label>
+                        {{ form.salary_max }}
+                    </div>
+                </div>
+                
+                <div class="form-row form-row--2">
+                    <div class="form-group">
+                        <label>Application Deadline</label>
+                        {{ form.deadline }}
+                    </div>
+                    <div class="form-group">
+                        <label>Company Logo</label>
+                        {{ form.company_logo }}
+                        <span class="field-help">Optional. PNG or JPG.</span>
+                    </div>
+                </div>
+                
+                <div class="form-group form-group--inline">
+                    {{ form.is_active }}
+                    <label for="{{ form.is_active.id_for_label }}">List this job as active</label>
+                </div>
+            </div>
+            
+            <div class="form-actions">
+                <button type="submit" class="btn btn--primary btn--lg">{{ submit_label }}</button>
+                <a href="{% url 'jobs:job_list' %}" class="btn btn--ghost">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

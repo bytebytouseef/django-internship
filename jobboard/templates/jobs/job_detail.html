@@ -1,0 +1,104 @@
+{% extends 'base.html' %} {% block title %}{{ job.title }} — HireBoard{%
+endblock %} {% block content %}
+<div class="container detail-layout">
+  <div class="detail-main">
+    <div class="detail-header">
+      {% if job.company_logo %}
+      <img
+        src="{{ job.company_logo.url }}"
+        alt="{{ job.company_name }}"
+        class="detail-logo"
+      />
+      {% else %}
+      <div class="company-logo-placeholder company-logo-placeholder--lg">
+        {{ job.company_name|first }}
+      </div>
+      {% endif %}
+      <div>
+        <h1 class="detail-title">{{ job.title }}</h1>
+        <p class="detail-company">{{ job.company_name }}</p>
+        <div class="detail-meta">
+          <span>📍 {{ job.location }}</span>
+          <span>🕐 {{ job.get_job_type_display }}</span>
+          <span>📈 {{ job.get_experience_level_display }}</span>
+          {% if job.salary_min or job.salary_max %}
+          <span>💰 {{ job.get_salary_display_text }}</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="detail-section">
+      <h2>About the Role</h2>
+      <div class="detail-body">{{ job.description|linebreaks }}</div>
+    </div>
+
+    <div class="detail-section">
+      <h2>Requirements</h2>
+      <div class="detail-body">{{ job.requirements|linebreaks }}</div>
+    </div>
+
+    {% if job.deadline %}
+    <p class="detail-deadline">
+      ⏰ Apply before: <strong>{{ job.deadline|date:"F j, Y" }}</strong>
+    </p>
+    {% endif %}
+  </div>
+
+  <aside class="detail-sidebar">
+    <div class="apply-card">
+      <h3>Apply to this Role</h3>
+
+      {% if user.is_authenticated %} {% if user.is_company %}
+      <p class="apply-note">Company accounts cannot apply to jobs.</p>
+      {% elif already_applied %}
+      <div class="already-applied">✅ You've already applied!</div>
+      {% else %}
+      <a
+        href="{% url 'jobs:apply' job.pk %}"
+        class="btn btn--primary btn--full"
+      >
+        Apply Now →
+      </a>
+      {% endif %} {% if user == job.posted_by %}
+      <div class="owner-actions">
+        <a
+          href="{% url 'jobs:job_update' job.pk %}"
+          class="btn btn--outline btn--sm"
+          >Edit Job</a
+        >
+        <a
+          href="{% url 'jobs:job_delete' job.pk %}"
+          class="btn btn--danger btn--sm"
+          >Delete</a
+        >
+      </div>
+      {% endif %} {% else %}
+      <p class="apply-note">Sign in to apply for this position.</p>
+      <a href="{% url 'accounts:login' %}" class="btn btn--primary btn--full"
+        >Log In to Apply</a
+      >
+      <a
+        href="{% url 'accounts:signup_applicant' %}"
+        class="btn btn--outline btn--full"
+        >Create Account</a
+      >
+      {% endif %}
+    </div>
+
+    <div class="sidebar-card">
+      <h4>About {{ job.company_name }}</h4>
+      <p>Posted by: <strong>{{ job.posted_by.get_display_name }}</strong></p>
+      {% if job.posted_by.company_website %}
+      <a
+        href="{{ job.posted_by.company_website }}"
+        target="_blank"
+        class="btn btn--ghost btn--sm"
+        >Visit Website ↗</a
+      >
+      {% endif %}
+      <p class="sidebar-date">Posted {{ job.created_at|timesince }} ago</p>
+    </div>
+  </aside>
+</div>
+{% endblock %}
